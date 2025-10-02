@@ -1,0 +1,51 @@
+"" Source your .vimrc
+"source ~/.vimrc
+" remap leader to space
+let mapleader = " "
+nnoremap <SPACE> <Nop>
+
+"" -- Suggested options --
+" Show a few lines of context around the cursor. Note that this makes the
+" text scroll if you mouse-click near the start or end of the window.
+set scrolloff=5
+
+"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
+"" Map \r to the Reformat Code action
+"map \r <Action>(ReformatCode)
+
+"" Map <leader>d to start debuursor-ms/)
+"map <leader>d <Action>(Debug)
+
+"" Map \b to toggle the breakpoint on the current line
+"map \b <Action>(ToggleLineBreakpoint)
+
+
+" Find more examples here: https://jb.gg/share-ideavimrc
+set easymotion
+map <Nop> <Plug>(easymotion-prefix)
+map <leader>ss <Plug>(easymotion-s)
+nmap <leader>se <action>(SearchEverywhere)
+nmap gI <action>(GotoImplementation)
+nmap <leader>gi <action>(GotoImplementation)
+nmap <leader><leader> <action>(RecentFiles)
+nmap <leader>/ <action>(Find)
+nmap <leader>sf <action>(GotoFile)
+nmap <leader>sg <action>(FindInPath)
+nmap <leader>ds <action>(FileStructurePopup)
+nmap <leader>rn <action>(RenameElement)
+nmap <leader>ca <action>(ShowIntentionActions)
+nmap <leader>nc <action>(ClearAllNotifications)
+
+nmap [[ <Action>(MethodUp)
+nmap ]] <Action>(MethodDown)
+nmap ]e <Action>(GotoNextError)
+nmap [e <Action>(GotoPreviousError)
+
+
+vmap J :m '>+1<CR>gv=gv
+vmap K :m '<-2<CR>gv=gv
+
+noremap <C-K> <C-U>
+noremap <C-k> <C-u>
+noremap <C-J> <C-d>
+noremap <C-j> <C-d>
