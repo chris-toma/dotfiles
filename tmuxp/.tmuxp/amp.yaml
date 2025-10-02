@@ -1,0 +1,84 @@
+session_name: amp
+windows:
+- layout: cc3e,178x47,0,0,1
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp aliexpress 
+  start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: alliexpress
+- focus: 'true'
+  layout: cc3d,178x47,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp affiliate 
+  start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: affiliate
+- layout: cc3e,178x47,0,0,1
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp merchant 
+  start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: merchant
+- layout: cc3f,178x47,0,0,2
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp coupon 
+  start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: coupon
+- layout: cc40,178x47,0,0,3
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp creator 
+  start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: creator
+- layout: cc41,178x47,0,0,4
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp data
+  start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: data
+
+- layout: cc42,178x47,0,0,5
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp export
+  start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: export
+
+- layout: cc42,178x47,0,0,5
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp datastats
+  start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: datastats
+- layout: cc43,178x47,0,0,6
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp link
+  start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: link
+
+- layout: cc43,178x47,0,0,6
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: docker start -a rabbitmq
+  start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: rabbit-docker
+
+- layout: cc43,178x47,0,0,6
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: sleep 60 && /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
+  start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: disable-firewall

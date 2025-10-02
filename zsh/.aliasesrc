@@ -1,0 +1,13 @@
+alias md='x(){ mkdir "$1"; cd "$1"; }; x'
+alias mollie_env='/Users/christoma/Library/Application\ Support/Local/ssh-entry/VnAUZONPR.sh ; exit;'
+alias listen='lsof -i -P -n | grep LISTEN'
+alias k=kubectl
+alias t=tmux
+alias tp=tmuxp
+alias c=clear
+alias d=docker
+alias e=exit
+alias n=nvim
+alias v='fd --type f --hidden --exclude .git | fzf-tmux -p --reverse | xargs nvim'
+alias lg=lazygit
+alias mockery2=~/projects/captiv8/go-microservices/bin/mockery

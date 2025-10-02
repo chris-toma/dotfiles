@@ -1,0 +1,11 @@
+session_name: utils
+windows:
+- focus: 'true'
+  layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate off && ./fut run utils notification
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: notification
+

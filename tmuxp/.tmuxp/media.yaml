@@ -1,0 +1,10 @@
+session_name: media
+windows:
+- focus: 'true'
+  layout: cc3d,178x47,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate off && ./fut run media manager 
+  start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: manager
