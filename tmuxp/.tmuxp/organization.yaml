@@ -1,0 +1,10 @@
+session_name: organization
+windows:
+- focus: 'true'
+  layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run organization overview
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: overview

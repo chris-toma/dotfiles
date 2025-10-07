@@ -82,6 +82,30 @@ windows:
     start_directory: /Users/christoma/projects/captiv8/go-microservices
   window_name: discovery-creator
 
+- layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /Users/christoma/.tmuxp/retry-service.sh "./fut run discovery ctrindexer" "discovery-ctrindexer"
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: discovery-ctrindexer
+
+- layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /Users/christoma/.tmuxp/retry-service.sh "./fut run discovery ctrsearch" "discovery-ctrsearch"
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: discovery-ctrsearch
+
+- layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /Users/christoma/.tmuxp/retry-service.sh "./fut run discovery search" "discovery-search"
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: discovery-search
+
 # Gateway Services
 - layout: 6652,178x47,0,0,13
   options: {}
@@ -149,6 +173,15 @@ windows:
     shell_command: /Users/christoma/.tmuxp/retry-service.sh "/usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate off && ./fut run utils notification" "utils-notification"
     start_directory: /Users/christoma/projects/captiv8/go-microservices
   window_name: utils-notification
+
+# Organization Services
+- layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /Users/christoma/.tmuxp/retry-service.sh "./fut run organization overview" "organization-overview"
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: organization-overview
 
 # System Management
 - layout: cc43,178x47,0,0,6
