@@ -106,6 +106,62 @@ windows:
     start_directory: /Users/christoma/projects/captiv8/go-microservices
   window_name: discovery-search
 
+- layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /Users/christoma/.tmuxp/retry-service.sh "./fut run discovery tadata" "discovery-tadata"
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: discovery-tadata
+
+- layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /Users/christoma/.tmuxp/retry-service.sh "./fut run discovery agent" "discovery-agent"
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: discovery-agent
+
+- layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /Users/christoma/.tmuxp/retry-service.sh "./fut run discovery favlist" "discovery-favlist"
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: discovery-favlist
+
+- layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /Users/christoma/.tmuxp/retry-service.sh "./fut run discovery ivilist" "discovery-ivilist"
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: discovery-ivilist
+
+- layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /Users/christoma/.tmuxp/retry-service.sh "./fut run discovery commercelist" "discovery-commercelist"
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: discovery-commercelist
+
+- layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /Users/christoma/.tmuxp/retry-service.sh "./fut run discovery matchinglist" "discovery-matchinglist"
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: discovery-matchinglist
+
+- layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /Users/christoma/.tmuxp/retry-service.sh "./fut run discovery talentlist" "discovery-talentlist"
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: discovery-talentlist
+
 # Gateway Services
 - layout: 6652,178x47,0,0,13
   options: {}
@@ -182,6 +238,15 @@ windows:
     shell_command: /Users/christoma/.tmuxp/retry-service.sh "./fut run organization overview" "organization-overview"
     start_directory: /Users/christoma/projects/captiv8/go-microservices
   window_name: organization-overview
+
+# Campaign Services
+- layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: /Users/christoma/.tmuxp/retry-service.sh "./fut run campaign creators" "campaign-creators"
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: campaign-creators
 
 # System Management
 - layout: cc43,178x47,0,0,6

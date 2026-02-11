@@ -32,3 +32,59 @@ windows:
     shell_command: ./fut run discovery search
     start_directory: /Users/christoma/projects/captiv8/go-microservices
   window_name: search
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery tadata
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: tadata
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery agent
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: agent
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery favlist
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: favlist
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery ivilist
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: ivilist
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery commercelist
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: commercelist
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery matchinglist
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: matchinglist
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery talentlist
+    start_directory: /Users/christoma/projects/captiv8/go-microservices
+  window_name: talentlist
