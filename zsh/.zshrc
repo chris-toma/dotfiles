@@ -156,3 +156,12 @@ if [ -f '/Users/christoma/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/chris
 if [ -f '/Users/christoma/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/christoma/google-cloud-sdk/completion.zsh.inc'; fi
 alias c8-start="/Users/christoma/.tmuxp/start-all.sh"
 export PATH="$HOME/.local/bin:$PATH"
+
+# SSH agent - use a fixed socket so it works across all tmux sessions
+export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
+if ! ssh-add -l &>/dev/null; then
+  # Agent socket is dead or missing, start a new one
+  rm -f "$SSH_AUTH_SOCK"
+  eval "$(ssh-agent -a "$SSH_AUTH_SOCK")" >/dev/null
+  ssh-add "$HOME/.ssh/github" 2>/dev/null
+fi
