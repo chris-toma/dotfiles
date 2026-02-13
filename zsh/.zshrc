@@ -89,6 +89,7 @@ fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 autoload -U compinit && compinit
 
 source $ZSH/oh-my-zsh.sh
+source $HOME/.tmux/window-name.zsh
 source $HOME/.aliasesrc
 source $HOME/.bash_profile
 # add here scripts for execution
