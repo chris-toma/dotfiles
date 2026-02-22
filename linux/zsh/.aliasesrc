@@ -6,7 +6,6 @@ alias tp=tmuxp
 alias c=clear
 alias d=docker
 alias e=exit
-alias n=nvim
 alias v='fd --type f --hidden --exclude .git | fzf-tmux -p --reverse | xargs nvim'
 alias lg=lazygit
 alias mockery2=~/projects/captiv8/go-microservices/bin/mockery
