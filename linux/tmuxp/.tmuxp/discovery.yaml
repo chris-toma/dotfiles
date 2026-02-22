@@ -1,0 +1,101 @@
+session_name: discovery
+windows:
+- focus: 'true'
+  layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery creator
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: creator
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery ctrindexer
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: ctrindexer
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery ctrsearch
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: ctrsearch
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery search
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: search
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery tadata
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: tadata
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery agent
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: agent
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery favlist
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: favlist
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery ivilist
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: ivilist
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery commercelist
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: commercelist
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery matchinglist
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: matchinglist
+- focus: 'false'
+  layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run discovery talentlist
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: talentlist

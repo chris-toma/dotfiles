@@ -1,0 +1,279 @@
+session_name: master
+windows:
+# AMP Services (aliexpress first, then affiliate, then others)
+- layout: cc3e,178x47,0,0,1
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run amp aliexpress" "amp-aliexpress"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: amp-aliexpress
+
+- layout: cc3d,178x47,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run amp affiliate" "amp-affiliate"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: amp-affiliate
+
+- layout: cc3e,178x47,0,0,1
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run amp merchant" "amp-merchant"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: amp-merchant
+
+- layout: cc3f,178x47,0,0,2
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run amp coupon" "amp-coupon"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: amp-coupon
+
+- layout: cc40,178x47,0,0,3
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run amp creator" "amp-creator"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: amp-creator
+
+- layout: cc41,178x47,0,0,4
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run amp data" "amp-data"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: amp-data
+
+- layout: cc42,178x47,0,0,5
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run amp export" "amp-export"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: amp-export
+
+- layout: cc42,178x47,0,0,5
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run amp datastats" "amp-datastats"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: amp-datastats
+
+- layout: cc43,178x47,0,0,6
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run amp link" "amp-link"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: amp-link
+
+# Discovery Services
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run discovery creator" "discovery-creator"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: discovery-creator
+
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run discovery ctrindexer" "discovery-ctrindexer"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: discovery-ctrindexer
+
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run discovery ctrsearch" "discovery-ctrsearch"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: discovery-ctrsearch
+
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run discovery search" "discovery-search"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: discovery-search
+
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run discovery tadata" "discovery-tadata"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: discovery-tadata
+
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run discovery agent" "discovery-agent"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: discovery-agent
+
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run discovery favlist" "discovery-favlist"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: discovery-favlist
+
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run discovery ivilist" "discovery-ivilist"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: discovery-ivilist
+
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run discovery commercelist" "discovery-commercelist"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: discovery-commercelist
+
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run discovery matchinglist" "discovery-matchinglist"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: discovery-matchinglist
+
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run discovery talentlist" "discovery-talentlist"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: discovery-talentlist
+
+# Gateway Services
+- layout: 6652,178x47,0,0,13
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run gateway api" "gateway-api"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: gateway-api
+
+# Media Services
+- layout: cc3d,178x47,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run media manager" "media-manager"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: media-manager
+
+# Storefront Services
+- layout: e853,178x48,0,0,62
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run storefront brand" "storefront-brand"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: storefront-brand
+
+- layout: e854,178x48,0,0,63
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run storefront creator" "storefront-creator"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: storefront-creator
+
+- layout: e855,178x48,0,0,64
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run storefront post" "storefront-post"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: storefront-post
+
+- layout: e856,178x48,0,0,65
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run storefront product" "storefront-product"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: storefront-product
+
+- layout: e857,178x48,0,0,66
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run storefront storefront" "storefront-main"
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: storefront-main
+
+# Utils Services
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run utils notification" "utils-notification"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: utils-notification
+
+# Organization Services
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run organization overview" "organization-overview"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: organization-overview
+
+# Campaign Services
+- layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: /home/ctoma/.tmuxp/retry-service.sh "./fut run campaign creators" "campaign-creators"
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: campaign-creators

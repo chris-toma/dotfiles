@@ -1,0 +1,12 @@
+session_name: gateway
+windows:
+- focus: 'true'
+  layout: 6652,178x47,0,0,13
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run gateway api
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+
+  window_name: gateway-api

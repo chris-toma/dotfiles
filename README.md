@@ -1,8 +1,24 @@
 # dotfiles
 
-## tmux
+## Structure
+
+- `tmux/`, `tmuxp/`, `zsh/`, `ideavim/` — macOS configs (default)
+- `linux/` — Linux-specific overrides, same directory layout
+
+## macOS Setup
+
+### Symlink dotfiles
 ```bash
-# Clone TPM into the tmux plugins directory
+ln -sf ~/dotfiles/tmux/.tmux ~/.tmux
+ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
+ln -sf ~/dotfiles/tmuxp/.tmuxp ~/.tmuxp
+ln -sf ~/dotfiles/zsh/.zshrc ~/.zshrc
+ln -sf ~/dotfiles/zsh/.aliasesrc ~/.aliasesrc
+ln -sf ~/dotfiles/ideavim/.ideavimrc ~/.ideavimrc
+```
+
+### tmux
+```bash
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 ```bash
@@ -11,26 +27,75 @@ Ctrl + r # Reload tmux environment
 Ctrl + s + U # Update plugins
 ```
 
-## zsh
+### zsh
 ```bash
-# Clone oh-my-zsh if not already installed
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-# Go to custom plugins directory
 cd $ZSH_CUSTOM/plugins
-
-# Install Git History
 git clone https://github.com/johnhamelink/git-history.git
-
-# Install zsh-syntax-highlighting
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-
-# Install zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-autosuggestions.git
-
-# Install zsh-vi-mode
 git clone https://github.com/jeffreytse/zsh-vi-mode.git
-
-# Install zsh-easy-motion
 git clone https://github.com/IngoHeimbach/zsh-easy-motion.git
+```
+
+---
+
+## Linux Setup
+
+Uses files from `linux/` which override the macOS defaults.
+
+### Key differences from macOS
+- Paths use `/home/<user>/` instead of `/Users/<user>/`
+- Docker started via `sudo systemctl start docker` (not `open -a Docker`)
+- `listen` alias uses `ss -tlnp` instead of `lsof`
+- No macOS firewall commands
+- No Homebrew paths; uses system package manager
+- tmux windows use `@managed` option so tmuxp-managed windows keep their names
+
+### Symlink dotfiles
+```bash
+# tmux (shared config + linux window-name.zsh)
+ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
+mkdir -p ~/.tmux
+ln -sf ~/dotfiles/tmux/.tmux/plugins ~/.tmux/plugins
+ln -sf ~/dotfiles/linux/tmux/.tmux/window-name.zsh ~/.tmux/window-name.zsh
+
+# tmuxp
+ln -sf ~/dotfiles/linux/tmuxp/.tmuxp ~/.tmuxp
+
+# zsh
+ln -sf ~/dotfiles/linux/zsh/.zshrc ~/.zshrc
+ln -sf ~/dotfiles/linux/zsh/.aliasesrc ~/.aliasesrc
+
+# ideavim (shared)
+ln -sf ~/dotfiles/ideavim/.ideavimrc ~/.ideavimrc
+```
+
+### tmux
+```bash
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+```
+```bash
+Ctrl + s + I # Install plugins
+Ctrl + r # Reload tmux environment
+Ctrl + s + U # Update plugins
+```
+
+### zsh
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+cd $ZSH_CUSTOM/plugins
+git clone https://github.com/johnhamelink/git-history.git
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+git clone https://github.com/zsh-users/zsh-autosuggestions.git
+git clone https://github.com/jeffreytse/zsh-vi-mode.git
+git clone https://github.com/IngoHeimbach/zsh-easy-motion.git
+```
+
+### Dependencies (for c8-start)
+```bash
+sudo apt install docker.io
+pip install tmuxp
 ```

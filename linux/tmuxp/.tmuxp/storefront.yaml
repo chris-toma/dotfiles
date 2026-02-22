@@ -1,0 +1,43 @@
+session_name: storefront
+windows:
+- layout: e853,178x48,0,0,62
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run storefront brand
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: brand
+- layout: e854,178x48,0,0,63
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run storefront creator
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: creator
+- layout: e855,178x48,0,0,64
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run storefront post
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: post
+- layout: e856,178x48,0,0,65
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run storefront product
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: product
+- focus: 'true'
+  layout: e857,178x48,0,0,66
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run storefront storefront
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: storefront

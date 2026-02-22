@@ -1,0 +1,86 @@
+session_name: amp
+windows:
+- layout: cc3e,178x47,0,0,1
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp aliexpress
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: alliexpress
+- focus: 'true'
+  layout: cc3d,178x47,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp affiliate
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: affiliate
+- layout: cc3e,178x47,0,0,1
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp merchant
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: merchant
+- layout: cc3f,178x47,0,0,2
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp coupon
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: coupon
+- layout: cc40,178x47,0,0,3
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp creator
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: creator
+- layout: cc41,178x47,0,0,4
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp data
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: data
+
+- layout: cc42,178x47,0,0,5
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp export
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: export
+
+- layout: cc42,178x47,0,0,5
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp datastats
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: datastats
+- layout: cc43,178x47,0,0,6
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run amp link
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: link
+
+- layout: cc43,178x47,0,0,6
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: docker start -a rabbitmq
+  start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: rabbit-docker

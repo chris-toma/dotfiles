@@ -1,0 +1,11 @@
+session_name: utils
+windows:
+- focus: 'true'
+  layout: c43d,178x45,0,0,0
+  options:
+    "@managed": 1
+  panes:
+  - focus: 'true'
+    shell_command: ./fut run utils notification
+    start_directory: /home/ctoma/projects/captiv8/go-microservices
+  window_name: notification
