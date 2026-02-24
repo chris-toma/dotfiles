@@ -1,13 +1,12 @@
 "" Source your .vimrc
 "source ~/.vimrc
-" remap leader to space
-let mapleader = " "
-nnoremap <SPACE> <Nop>
 
-"" -- Suggested options --
-" Show a few lines of context around the cursor. Note that this makes the
-" text scroll if you mouse-click near the start or end of the window.
-set scrolloff=5
+" --- Leader key ---
+let mapleader = " "
+nnoremap <SPACE> <Nop>          " disable space in normal mode so it only acts as leader
+
+" --- Options ---
+set scrolloff=5                 " keep 5 lines visible above/below cursor when scrolling
 
 "" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
 "" Map \r to the Reformat Code action
@@ -19,33 +18,81 @@ set scrolloff=5
 "" Map \b to toggle the breakpoint on the current line
 "map \b <Action>(ToggleLineBreakpoint)
 
-
 " Find more examples here: https://jb.gg/share-ideavimrc
-set easymotion
-map <Nop> <Plug>(easymotion-prefix)
-map <leader>ss <Plug>(easymotion-s)
-nmap <leader>se <action>(SearchEverywhere)
-nmap gI <action>(GotoImplementation)
-nmap <leader>gi <action>(GotoImplementation)
-nmap <leader><leader> <action>(RecentFiles)
-nmap <leader>/ <action>(Find)
-nmap <leader>sf <action>(GotoFile)
-nmap <leader>sg <action>(FindInPath)
-nmap <leader>ds <action>(FileStructurePopup)
-nmap <leader>rn <action>(RenameElement)
-nmap <leader>ca <action>(ShowIntentionActions)
-nmap <leader>nc <action>(ClearAllNotifications)
 
-nmap [[ <Action>(MethodUp)
-nmap ]] <Action>(MethodDown)
-nmap ]e <Action>(GotoNextError)
-nmap [e <Action>(GotoPreviousError)
+" --- Plugins ---
+set easymotion                  " enable easymotion plugin (jump anywhere with <leader>ss)
+map <Nop> <Plug>(easymotion-prefix) " disable default easymotion prefix to avoid conflicts
+map <leader>ss <Plug>(easymotion-s)  " trigger 1-char easymotion search
 
+" --- Leader mappings (normal mode) ---
+nmap <leader>se <action>(SearchEverywhere)       " fuzzy search everything (files, actions, symbols)
+nmap gI <action>(GotoImplementation)             " go to implementation (also on gI)
+nmap <leader>gi <action>(GotoImplementation)     " go to implementation
+nmap <leader><leader> <action>(RecentFiles)      " show recent files popup
+nmap <leader>/ <action>(Find)                    " find in current file
+nmap <leader>sf <action>(GotoFile)               " search/go to file by name
+nmap <leader>sg <action>(FindInPath)             " search/grep across project
+nmap <leader>ds <action>(FileStructurePopup)     " show file structure (functions, methods)
+nmap <leader>rn <action>(RenameElement)          " rename symbol under cursor
+nmap <leader>ca <action>(ShowIntentionActions)   " show code actions / quick fixes
+nmap <leader>nc <action>(ClearAllNotifications)  " dismiss all IDE notifications
 
-vmap J :m '>+1<CR>gv=gv
-vmap K :m '<-2<CR>gv=gv
+" --- Navigation (normal mode) ---
+nmap [[ <Action>(MethodUp)          " jump to previous method/function
+nmap ]] <Action>(MethodDown)        " jump to next method/function
+nmap ]e <Action>(GotoNextError)     " jump to next error
+nmap [e <Action>(GotoPreviousError) " jump to previous error
 
-noremap <C-K> <C-U>
+" --- Visual mode line moving ---
+vmap J :m '>+1<CR>gv=gv            " move selected lines down
+vmap K :m '<-2<CR>gv=gv            " move selected lines up
+
+" --- Scroll remaps (all modes) ---
+noremap <C-K> <C-U>                " Ctrl+K = half-page up (instead of default Ctrl+U)
 noremap <C-k> <C-u>
-noremap <C-J> <C-d>
+noremap <C-J> <C-d>                " Ctrl+J = half-page down (instead of default Ctrl+D)
 noremap <C-j> <C-d>
+
+" Key handler conflicts: Vim vs IDE
+"                           Vim                    IDE (Mac keymap)               IDE (Linux $default keymap)
+" --- Vim handlers ---
+sethandler <S-CR> a:vim   " open line below        start new line                 start new line
+sethandler <S-Left> a:vim  " move cursor left      extend selection left           extend selection left
+sethandler <S-Right> a:vim " move cursor right     extend selection right          extend selection right
+sethandler <C-2> a:vim    " set mark / ^@ (NUL)    go to bookmark 2               go to bookmark 2
+sethandler <C-D> a:vim    " half-page down          directory structure             duplicate line
+sethandler <C-I> a:vim    " jump forward / tab      implement methods               implement methods
+sethandler <C-J> a:vim    " (remapped ½pg down)     show commit tooltip             insert live template
+sethandler <C-K> a:vim    " (remapped ½pg up)       cut to line end                 commit (VCS)
+sethandler <C-O> a:vim    " jump back               override methods                override methods
+
+" --- IDE handlers ---
+sethandler <C-A> a:ide    " increment number        select first item              select all
+sethandler <C-C> a:ide    " exit insert/cancel     (no binding)                   copy
+sethandler <C-V> a:ide    " visual block mode       VCS operations popup             paste
+sethandler <C-X> a:ide    " decrement number        (no binding)                     cut
+sethandler <C-S> a:ide    " (unused in vim)        (no binding)                   save all
+sethandler <M-;> a:ide    " (unused in vim)        (keymap-specific)              (keymap-specific)
+sethandler <C-;> a:ide    " (unused in vim)        (keymap-specific)              (keymap-specific)
+sethandler <M-S-;> a:ide  " (unused in vim)        (keymap-specific)              (keymap-specific)
+sethandler <C-S-;> a:ide  " (unused in vim)        (keymap-specific)              (keymap-specific)
+sethandler <S-Up> a:ide    " move cursor up        extend selection up             extend selection up
+sethandler <S-Down> a:ide  " move cursor down      extend selection down           extend selection down
+sethandler <C-Left> a:ide  " word back             select previous tab             move to previous word
+sethandler <C-Right> a:ide " word forward          select next tab                 move to next word
+sethandler <C-S-2> a:ide  " (unused in vim)        toggle bookmark 2              toggle bookmark 2
+sethandler <C-6> a:ide    " switch alternate file   go to bookmark 6               go to bookmark 6
+sethandler <C-S-6> a:ide  " (unused in vim)        toggle bookmark 6              toggle bookmark 6
+sethandler <C-B> a:ide    " page up                select parent node              go to declaration
+sethandler <C-E> a:ide    " scroll down one line    move caret to line end          recent files
+sethandler <C-F> a:ide    " page down              right (emacs move)              find
+sethandler <C-G> a:ide    " show file info          add sel for next occurrence     go to line:column
+sethandler <C-H> a:ide    " backspace (alias)       base on this type               type hierarchy
+sethandler <C-L> a:ide    " redraw screen           scroll to center                go to line
+sethandler <C-M> a:ide    " enter (alias)           module                          (no binding)
+sethandler <C-N> a:ide    " next line/autocomplete  down split / switch down        go to class
+sethandler <C-P> a:ide    " previous line           select previous row             parameter info
+sethandler <C-R> a:ide    " redo                    search in command history        replace
+sethandler <C-T> a:ide    " jump back from tag      group services by type           update project (VCS)
+sethandler <C-W> a:ide    " window commands prefix  delete previous word             extend selection
