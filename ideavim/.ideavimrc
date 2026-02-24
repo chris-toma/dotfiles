@@ -1,4 +1,4 @@
-"" Source your .vimrc
+" Source your .vimrc
 "source ~/.vimrc
 
 " --- Leader key ---
@@ -12,7 +12,7 @@ set scrolloff=5                 " keep 5 lines visible above/below cursor when s
 "" Map \r to the Reformat Code action
 "map \r <Action>(ReformatCode)
 
-"" Map <leader>d to start debuursor-ms/)
+"" Map <leader>d to start debug
 "map <leader>d <Action>(Debug)
 
 "" Map \b to toggle the breakpoint on the current line
@@ -21,9 +21,9 @@ set scrolloff=5                 " keep 5 lines visible above/below cursor when s
 " Find more examples here: https://jb.gg/share-ideavimrc
 
 " --- Plugins ---
-set easymotion                  " enable easymotion plugin (jump anywhere with <leader>ss)
-map <Nop> <Plug>(easymotion-prefix) " disable default easymotion prefix to avoid conflicts
-map <leader>ss <Plug>(easymotion-s)  " trigger 1-char easymotion search
+set easymotion
+let g:EasyMotion_do_mapping = 0
+nmap <leader>ss <Plug>(easymotion-s)
 
 " --- Leader mappings (normal mode) ---
 nmap <leader>se <action>(SearchEverywhere)       " fuzzy search everything (files, actions, symbols)
