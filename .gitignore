@@ -1,3 +1,4 @@
 .git
 .idea
 tmux/.tmux/plugins/
+zsh/.zsh_history
