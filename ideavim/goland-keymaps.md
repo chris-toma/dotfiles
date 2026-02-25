@@ -6,12 +6,11 @@ Parent keymap: `Mac OS X 10.5+`
 
 | Shortcut | Action |
 |---|---|
-| `F10, 1` | ActivateProjectToolWindow |
 | `F10, a` | Annotate (git blame) |
 | `F10, b` | Git.Branches |
 | `F10, c` | Coverage |
 | `F10, d` | ActivateDatabaseToolWindow |
-| `F10, e` | ActivateElectroJunToolWindow |
+| `F10, e` | ActivateProjectToolWindow |
 | `F10, f` | HideAllWindows |
 | `F10, h` | Git.Log.Hide.Branches |
 | `F10, k` | copilot.git.commit.button |
