@@ -271,60 +271,72 @@ This provides additional aliases: `md` (mkdir + cd), `listen`, `k` (kubectl), `t
 
 ---
 
-## Step 8: Configure Alacritty
+## Step 8: Configure terminal emulators
 
-**Goal:** Set Alacritty to use zsh as its shell and set font size to 13.
+**Goal:** Set all installed terminal emulators to use zsh as the shell, CaskaydiaMono Nerd Font, and font size 13.
 
-**Precondition:** Alacritty must be installed. Check with `which alacritty`.
+**Discovery:** Run the following to detect which terminals are installed, then configure only those present:
+```bash
+for term in alacritty ghostty kitty wezterm foot konsole gnome-terminal xfce4-terminal tilix terminator; do
+  which $term 2>/dev/null && echo "  -> FOUND: $term"
+done
+```
 
-### 8a: Find the Alacritty config
+---
 
-Look for config files in this order:
+### 8a: Configure Alacritty
+
+**Precondition:** Check with `which alacritty`. Skip if not installed.
+
+**Find the config:** Look in this order:
 1. `~/.config/alacritty/alacritty.toml` (modern TOML format)
 2. `~/.config/alacritty/alacritty.yml` (legacy YAML format)
 
 The main config may use `import` to split settings across multiple files. Read the main config to discover which files contain `[shell]` and `[font]` settings.
 
-### 8b: Set shell to zsh
-
-Find the file containing the `[shell]` section. Replace the `program` value with `/usr/bin/zsh`:
+**Set shell to zsh:** Find or create the `[shell]` section:
 
 ```toml
 [shell]
 program = "/usr/bin/zsh"
 ```
 
-If no `[shell]` section exists, add it.
-
-### 8c: Set font size to 13
-
-Find the file containing `[font]` with a `size` key. Set it to `13`:
-
-```toml
-[font]
-size = 13
-```
-
-### 8d: Set Nerd Font family (if not already set)
-
-Find or create the font family config:
+**Set font family and size to 13:**
 
 ```toml
 [font]
 normal = { family = "CaskaydiaMono Nerd Font", style = "Regular" }
 bold = { family = "CaskaydiaMono Nerd Font", style = "Bold" }
 italic = { family = "CaskaydiaMono Nerd Font", style = "Italic" }
+size = 13
 ```
 
-**Verify:** Run `alacritty --print-all-events 2>&1 | head -1` or inspect the config files to confirm changes are syntactically valid TOML.
+**Verify:** Inspect the config file to confirm valid TOML syntax.
 
 ---
 
-## Step 9: Configure GNOME Terminal
+### 8b: Configure Ghostty
 
-**Goal:** Set font to CaskaydiaMono Nerd Font at size 13 in GNOME Terminal.
+**Precondition:** Check with `which ghostty`. Skip if not installed.
 
-**Precondition:** GNOME Terminal must be installed. Check with `which gnome-terminal`.
+**Config location:** `~/.config/ghostty/config` (plain key-value format, one setting per line).
+
+**Set font family and size to 13:** Find and update (or add) these lines:
+
+```
+font-family = "CaskaydiaMono Nerd Font"
+font-size = 13
+```
+
+Ghostty uses zsh automatically if it is the user's default shell (Step 6), so no explicit shell setting is needed.
+
+**Verify:** Run `ghostty +show-config | grep -E 'font-family|font-size'` — must show `CaskaydiaMono Nerd Font` and `13`.
+
+---
+
+### 8c: Configure GNOME Terminal (if installed)
+
+**Precondition:** Check with `which gnome-terminal`. Skip if not installed.
 
 **Commands:**
 ```bash
@@ -704,6 +716,111 @@ journalctl -u logid --no-pager -n 20
 ```
 
 Run `logid -v` (after stopping the service) to confirm button mappings are applied and no warnings appear.
+
+---
+
+## Step 18: Install Slack
+
+**Goal:** Install the Slack desktop client for team communication.
+
+**Check first:** Run `which slack`. If it returns a path, skip this step.
+
+**Commands (Arch Linux with yay):**
+```bash
+yay -S --noconfirm slack-desktop
+```
+
+**Commands (Ubuntu/Debian):**
+```bash
+curl -fLO https://downloads.slack-edge.com/desktop-releases/linux/x64/4.47.69/slack-desktop-4.47.69-amd64.deb
+sudo dpkg -i slack-desktop-4.47.69-amd64.deb
+sudo apt install -f -y
+rm slack-desktop-4.47.69-amd64.deb
+```
+
+**Verify:** Run `which slack` — must return a path. Launch with `slack` from the terminal or from the application menu.
+
+---
+
+## Step 19: Install GoLand
+
+**Goal:** Install JetBrains GoLand IDE for Go development.
+
+**Check first:** Run `which goland`. If it returns a path, skip this step.
+
+**Commands (Arch Linux with yay):**
+```bash
+yay -S --noconfirm goland goland-jre
+```
+
+**Commands (Ubuntu/Debian):** Download from https://www.jetbrains.com/go/download/ or install via the JetBrains Toolbox App.
+
+**Verify:** Run `which goland` — must return `/usr/bin/goland`.
+
+---
+
+## Step 20: Install Postman
+
+**Goal:** Install Postman for API testing and development.
+
+**Check first:** Run `which postman`. If it returns a path, skip this step.
+
+**Commands (Arch Linux with yay):**
+```bash
+yay -S --noconfirm postman-bin
+```
+
+**Commands (Ubuntu/Debian):**
+```bash
+curl -fLO https://dl.pstmn.io/download/latest/linux_64 -o postman-linux-x64.tar.gz
+sudo tar -xzf postman-linux-x64.tar.gz -C /opt
+sudo ln -sf /opt/Postman/Postman /usr/local/bin/postman
+rm postman-linux-x64.tar.gz
+```
+
+**Verify:** Run `which postman` — must return a path.
+
+---
+
+## Step 21: Configure Hyprland keyboard shortcuts
+
+**Goal:** Add Alt + number shortcuts to quickly launch frequently used applications.
+
+**Precondition:** Hyprland must be the active compositor. Check with `echo $XDG_CURRENT_DESKTOP` — must return `Hyprland`. All target applications must be installed (Steps 18–20).
+
+### 21a: Find the bindings config
+
+Hyprland splits config across files in `~/.config/hypr/`. The keybindings file is:
+```
+~/.config/hypr/bindings.conf
+```
+
+### 21b: Add quick-launch bindings
+
+Append the following to `~/.config/hypr/bindings.conf`:
+
+```bash
+# Quick-launch apps with Alt + number
+bindd = ALT, 1, Chrome, exec, uwsm-app -- google-chrome-stable
+bindd = ALT, 2, Ghostty, exec, uwsm-app -- ghostty
+bindd = ALT, 3, GoLand, exec, uwsm-app -- goland
+bindd = ALT, 4, Slack, exec, uwsm-app -- slack
+bindd = ALT, 9, Postman, exec, uwsm-app -- postman
+```
+
+**Notes:**
+- `bindd` provides a description (3rd field) that shows up in `hyprctl binds`.
+- `uwsm-app --` ensures the app launches under the Wayland session manager correctly.
+- Alt+5 through Alt+8 are left free for future use.
+
+### 21c: Reload Hyprland
+
+Hyprland live-reloads config on save, so no manual reload is needed. To force a reload:
+```bash
+hyprctl reload
+```
+
+**Verify:** Run `hyprctl binds | grep -A2 'ALT.*[1-9]'` — must show the five bindings. Press Alt+1 to confirm Chrome launches.
 
 ---
 
