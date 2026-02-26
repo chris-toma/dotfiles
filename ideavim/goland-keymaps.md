@@ -13,7 +13,7 @@ Parent keymap: `Mac OS X 10.5+`
 | `F10, e` | ActivateProjectToolWindow |
 | `F10, f` | HideAllWindows |
 | `F10, h` | Git.Log.Hide.Branches |
-| `F10, k` | copilot.git.commit.button |
+| `F10, k` | ActivateCommitToolWindow |
 | `F10, p` | ManageRecentProjects |
 | `F10, q` | CloseProject |
 | `F10, r` | ChooseDebugConfiguration |
@@ -115,7 +115,7 @@ Shortcuts using Cmd on Mac with their Linux equivalents and what the Linux short
 | Command | Linux | Mac | Linux shortcut on Mac |
 |---|---|---|---|
 | Commit | Ctrl+K | Cmd+K | Delete to end of line |
-| Update project | Ctrl+T | Cmd+T | Transpose characters |
+| Git pull | Ctrl+T | Cmd+T | Transpose characters |
 | Push | Ctrl+Shift+K | Cmd+Shift+K | Not mapped |
 | Rollback | Ctrl+Alt+Z | Cmd+Alt+Z | Not mapped |
 | Show diff | Ctrl+D | Cmd+D | Delete char after caret |
