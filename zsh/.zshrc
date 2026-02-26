@@ -1,3 +1,4 @@
+eval "$(/opt/homebrew/bin/brew shellenv)"
 export ZSH="$HOME/.oh-my-zsh"
 export DISABLE_AUTO_TITLE='true'
 set -o vi
@@ -12,7 +13,6 @@ autoload -U compinit && compinit
 source $ZSH/oh-my-zsh.sh
 source $HOME/.tmux/window-name.zsh
 source $HOME/.aliasesrc
-source $HOME/.bash_profile
 export PATH="/Users/christoma/bin:$PATH"
 
 set number
