@@ -2,19 +2,16 @@
 
 ## Structure
 
-- `tmux/`, `tmuxp/`, `zsh/`, `ideavim/` — macOS configs (default)
+- `tmux/`, `tmuxp/`, `zsh/`, `ideavim/` — macOS configs (managed with [stow](https://www.gnu.org/software/stow/))
+- `zsh/.config/sheldon/plugins.toml` — zsh plugin config ([sheldon](https://github.com/rossmacarthur/sheldon))
 - `linux/` — Linux-specific overrides, same directory layout
 
 ## macOS Setup
 
 ### Symlink dotfiles
 ```bash
-ln -sf ~/dotfiles/tmux/.tmux ~/.tmux
-ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
-ln -sf ~/dotfiles/tmuxp/.tmuxp ~/.tmuxp
-ln -sf ~/dotfiles/zsh/.zshrc ~/.zshrc
-ln -sf ~/dotfiles/zsh/.aliasesrc ~/.aliasesrc
-ln -sf ~/dotfiles/ideavim/.ideavimrc ~/.ideavimrc
+cd ~/.dotfiles
+stow tmux tmuxp zsh ideavim
 ```
 
 ### tmux
@@ -28,15 +25,14 @@ Ctrl + s + U # Update plugins
 ```
 
 ### zsh
+Plugins are managed by [sheldon](https://github.com/rossmacarthur/sheldon). Config lives in `zsh/.config/sheldon/plugins.toml` and is symlinked via stow.
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-cd $ZSH_CUSTOM/plugins
-git clone https://github.com/johnhamelink/git-history.git
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-git clone https://github.com/zsh-users/zsh-autosuggestions.git
-git clone https://github.com/jeffreytse/zsh-vi-mode.git
-git clone https://github.com/IngoHeimbach/zsh-easy-motion.git
+brew install sheldon
+sheldon lock
+```
+To update plugins:
+```bash
+sheldon lock --update
 ```
 
 ---
@@ -83,15 +79,15 @@ Ctrl + s + U # Update plugins
 ```
 
 ### zsh
+Plugins are managed by [sheldon](https://github.com/rossmacarthur/sheldon).
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-cd $ZSH_CUSTOM/plugins
-git clone https://github.com/johnhamelink/git-history.git
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-git clone https://github.com/zsh-users/zsh-autosuggestions.git
-git clone https://github.com/jeffreytse/zsh-vi-mode.git
-git clone https://github.com/IngoHeimbach/zsh-easy-motion.git
+# install sheldon (use your distro's package manager or cargo)
+cargo install sheldon
+sheldon lock
+```
+To update plugins:
+```bash
+sheldon lock --update
 ```
 
 ### Dependencies (for c8-start)

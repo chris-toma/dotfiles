@@ -9,6 +9,8 @@ alias d=docker
 alias e=exit
 alias n=nvim
 alias v='fd --type f --hidden --exclude .git | fzf-tmux -p --reverse | xargs nvim'
+alias y=yazi
+alias c8-start="$HOME/.tmuxp/start-all.sh"
 alias lg=lazygit
 alias mockery2=~/projects/captiv8/go-microservices/bin/mockery
 fut() {
