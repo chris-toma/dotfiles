@@ -36,4 +36,12 @@ export PATH="$HOME/.local/bin:$PATH"
 # fi
 
 eval "$(zoxide init zsh)"
+
+zoxide-widget() { zi; zle reset-prompt }
+zle -N zoxide-widget
+
+zvm_after_init() {
+  bindkey '\ef' zoxide-widget
+  bindkey -M vicmd '\ef' zoxide-widget
+}
 eval "$(starship init zsh)"
