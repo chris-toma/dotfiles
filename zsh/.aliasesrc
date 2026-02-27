@@ -3,8 +3,6 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias md='x(){ mkdir "$1"; cd "$1"; }; x'
-alias mollie_env='/Users/christoma/Library/Application\ Support/Local/ssh-entry/VnAUZONPR.sh ; exit;'
-alias listen='lsof -i -P -n | grep LISTEN'
 alias k=kubectl
 alias t=tmux
 alias tp=tmuxp
@@ -20,6 +18,18 @@ alias ls='eza --icons'
 alias ll='eza -la --icons --git --tree --level=2'
 alias lg=lazygit
 alias mockery2=~/projects/captiv8/go-microservices/bin/mockery
+
+# OS-specific aliases
+case "$(uname -s)" in
+  Darwin)
+    alias listen='lsof -i -P -n | grep LISTEN'
+    alias mollie_env="$HOME/Library/Application Support/Local/ssh-entry/VnAUZONPR.sh ; exit;"
+    ;;
+  Linux)
+    alias listen='ss -tlnp'
+    ;;
+esac
+
 fut() {
-    (cd /Users/christoma/projects/captiv8/go-microservices && ./fut "$@")
+    (cd "$HOME/projects/captiv8/go-microservices" && ./fut "$@")
 }

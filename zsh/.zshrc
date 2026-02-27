@@ -1,4 +1,13 @@
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# OS detection
+case "$(uname -s)" in
+  Darwin) OS="mac" ;;
+  Linux)  OS="linux" ;;
+esac
+
+if [[ "$OS" == "mac" ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 export DISABLE_AUTO_TITLE='true'
 
 source <(fzf --zsh)
@@ -10,6 +19,7 @@ eval "$(sheldon source)"
 source $HOME/.tmux/window-name.zsh
 source $HOME/.aliasesrc
 export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 export PATH="$PATH:$(go env GOPATH)/bin"
 
 HISTFILE=~/.zsh_history
@@ -26,14 +36,16 @@ setopt hist_find_no_dups
 
 if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
-export PATH="$HOME/.local/bin:$PATH"
 
-# export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
-# if ! ssh-add -l &>/dev/null; then
-#   rm -f "$SSH_AUTH_SOCK"
-#   eval "$(ssh-agent -a "$SSH_AUTH_SOCK")" >/dev/null
-#   ssh-add "$HOME/.ssh/github" 2>/dev/null
-# fi
+# SSH agent - use a fixed socket so it works across all tmux sessions (Linux only, macOS uses keychain)
+if [[ "$OS" == "linux" ]]; then
+  export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
+  if ! ssh-add -l &>/dev/null; then
+    rm -f "$SSH_AUTH_SOCK"
+    eval "$(ssh-agent -a "$SSH_AUTH_SOCK")" >/dev/null
+    ssh-add "$HOME/.ssh/github" 2>/dev/null
+  fi
+fi
 
 eval "$(zoxide init zsh)"
 
