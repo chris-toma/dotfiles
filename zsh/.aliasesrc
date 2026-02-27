@@ -11,6 +11,9 @@ alias n=nvim
 alias v='fd --type f --hidden --exclude .git | fzf-tmux -p --reverse | xargs nvim'
 alias y=yazi
 alias c8-start="$HOME/.tmuxp/start-all.sh"
+alias l='eza -la --icons --git'
+alias ls='eza --icons'
+alias ll='eza -la --icons --git --tree --level=2'
 alias lg=lazygit
 alias mockery2=~/projects/captiv8/go-microservices/bin/mockery
 fut() {
