@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=AWS VPN Client
+Comment=Open-source AWS VPN Client
+Exec=openaws-vpn-client
+Icon=network-vpn
+Type=Application
+Categories=Network;
+Keywords=vpn;aws;
