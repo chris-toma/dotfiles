@@ -17,13 +17,10 @@ alias l='eza -la --icons --git'
 alias ls='eza --icons'
 alias ll='eza -la --icons --git --tree --level=2'
 alias lg=lazygit
-alias mockery2=~/projects/captiv8/go-microservices/bin/mockery
-
 # OS-specific aliases
 case "$(uname -s)" in
   Darwin)
     alias listen='lsof -i -P -n | grep LISTEN'
-    alias mollie_env="$HOME/Library/Application Support/Local/ssh-entry/VnAUZONPR.sh ; exit;"
     ;;
   Linux)
     alias listen='ss -tlnp'
