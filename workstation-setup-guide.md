@@ -1,6 +1,6 @@
-# AI Agent Plan: Zsh + Oh My Zsh + Powerlevel10k Setup
+# AI Agent Plan: Workstation Setup
 
-You are setting up a Linux (Ubuntu/Debian) machine with zsh, Oh My Zsh, Powerlevel10k, and configuring terminal emulators. Follow these steps **in order**. Each step has preconditions, exact commands, and a verification check. Do not skip verifications.
+You are setting up a Linux (Ubuntu/Debian) development machine with zsh, Sheldon, Starship, and development tools. Follow these steps **in order**. Each step has preconditions, exact commands, and a verification check. Do not skip verifications.
 
 **Target OS:** Ubuntu/Debian (tested on Ubuntu 24.04)
 **Target user:** The current logged-in user (`$USER`)
@@ -23,39 +23,70 @@ sudo chmod 440 /etc/sudoers.d/$USER-nopasswd
 
 ---
 
-## Step 2: Install zsh
+## Step 2: Generate SSH key pair
 
-**Goal:** Install the zsh shell via the system package manager.
+**Goal:** Generate an Ed25519 SSH key pair for the user and display the public key so it can be added to GitHub, GitLab, remote servers, etc.
 
-**Commands:**
+**Check first:** Run `ls ~/.ssh/id_ed25519.pub 2>/dev/null`. If the file exists, skip generation and just print the existing public key.
+
+**Commands (if no key exists):**
 ```bash
-sudo apt update && sudo apt install -y zsh
+ssh-keygen -t ed25519 -C "$USER" -f ~/.ssh/id_ed25519 -N ""
 ```
 
-**Verify:** Run `which zsh` — must return `/usr/bin/zsh`. Run `zsh --version` — must show version output.
+**Then print the public key:**
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+
+**Display the public key output to the user** so they can copy it to GitHub/GitLab/servers.
+
+**Verify:** Both files must exist with correct permissions:
+```bash
+ls -la ~/.ssh/id_ed25519 ~/.ssh/id_ed25519.pub
+```
+- `~/.ssh/id_ed25519` must be `-rw-------` (600)
+- `~/.ssh/id_ed25519.pub` must be `-rw-r--r--` (644)
+
+**Optional — add to ssh-agent:**
+```bash
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+```
 
 ---
 
-## Step 3: Install Oh My Zsh
+## Step 3: Add GitHub to known hosts
 
-**Goal:** Install the Oh My Zsh framework into `~/.oh-my-zsh`. This also creates `~/.zshrc`.
+**Goal:** Allow SSH connections to GitHub without interactive host key confirmation.
 
-**Precondition:** zsh must be installed (Step 2).
-
-**Commands:**
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
 ```
 
-**Important:** The `--unattended` flag prevents the installer from switching the shell or requiring interactive input.
+**Verify:** Run `ssh -T git@github.com` — must show `Hi USERNAME! You've successfully authenticated`.
 
-**Verify:** Directory `~/.oh-my-zsh` must exist. File `~/.zshrc` must exist and contain `ZSH_THEME`.
+**Precondition:** The SSH public key from Step 2 must already be added to GitHub (Settings > SSH and GPG keys > New SSH key). Inform the user to do this manually before proceeding.
 
 ---
 
-## Step 4: Install a Nerd Font
+## Step 4: Clone dotfiles repo
 
-**Goal:** Powerlevel10k requires a Nerd Font for icons/glyphs. Install CaskaydiaMono Nerd Font.
+**Goal:** Clone the dotfiles repo. Many later steps depend on files from this repo.
+
+**Check first:** Run `ls ~/dotfiles/.git 2>/dev/null`. If it exists, skip this step.
+
+```bash
+git clone git@github.com:chris-toma/dotfiles.git ~/dotfiles
+```
+
+**Verify:** `ls ~/dotfiles/zsh/install.sh` — must exist.
+
+---
+
+## Step 5: Install a Nerd Font
+
+**Goal:** Install CaskaydiaMono Nerd Font for terminal icons (used by eza, starship, etc.).
 
 **Check first:** Run `fc-list | grep -i "CaskaydiaMono Nerd"`. If output is non-empty, skip this step.
 
@@ -72,202 +103,143 @@ fc-cache -fv
 
 ---
 
-## Step 5: Install Powerlevel10k theme
+## Step 6: Install fzf from GitHub releases
 
-**Goal:** Clone the Powerlevel10k theme into Oh My Zsh's custom themes directory and activate it.
+**Goal:** Install a recent version of fzf (0.48.0+). The dotfiles `.zshrc` uses `source <(fzf --zsh)` which requires fzf 0.48.0+. Ubuntu/Debian repos ship 0.44.1 which does not support this flag.
 
-**Precondition:** Oh My Zsh must be installed (Step 3).
+**Check first:** Run `fzf --version`. If the version is 0.48.0 or higher, skip this step.
 
 **Commands:**
 ```bash
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+FZF_VERSION=$(curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d 'v')
+curl -fLo /tmp/fzf.tar.gz "https://github.com/junegunn/fzf/releases/download/v${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz"
+sudo tar -xzf /tmp/fzf.tar.gz -C /usr/local/bin
+rm /tmp/fzf.tar.gz
 ```
 
-**Then edit `~/.zshrc`:** Find the line `ZSH_THEME="robbyrussell"` (or whatever value it has) and replace it with:
-```
-ZSH_THEME="powerlevel10k/powerlevel10k"
-```
-
-**Also append to the end of `~/.zshrc`:**
-```bash
-# Powerlevel10k config
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-```
-
-**Verify:** `grep 'ZSH_THEME="powerlevel10k/powerlevel10k"' ~/.zshrc` must match. Directory `~/.oh-my-zsh/custom/themes/powerlevel10k` must exist.
-
-**Note:** The Powerlevel10k configuration wizard (`p10k configure`) runs interactively on first zsh launch. You cannot run it non-interactively. Inform the user they need to run it manually after setup.
-
-### 5b: Install zsh plugins
-
-Clone these four plugins into Oh My Zsh's custom plugins directory:
-
-```bash
-ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-git clone https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
-git clone https://github.com/jeffreytse/zsh-vi-mode.git "$ZSH_CUSTOM/plugins/zsh-vi-mode"
-git clone https://github.com/zsh-users/zsh-completions.git "$ZSH_CUSTOM/plugins/zsh-completions"
-```
-
-**Then edit `~/.zshrc`:** Find the `plugins=(...)` line and replace it with:
-```bash
-plugins=(git history zsh-syntax-highlighting zsh-autosuggestions zsh-vi-mode)
-```
-
-**Also add above the `source $ZSH/oh-my-zsh.sh` line (zsh-completions needs special loading):**
-```bash
-fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
-autoload -U compinit && compinit
-```
-
-**Verify:** All four directories must exist:
-```bash
-ls -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-vi-mode ~/.oh-my-zsh/custom/plugins/zsh-completions
-```
+**Verify:** Run `fzf --version` — must show 0.48.0 or higher. Run `fzf --zsh` — must produce output (not an error).
 
 ---
 
-## Step 6: Set zsh as the default shell
+## Step 7: Install zsh and shell tools
 
-**Goal:** Make zsh the login shell for `$USER`.
+**Goal:** Install zsh, Sheldon (plugin manager), Starship (prompt), and all shell dependencies. Then deploy the zsh dotfiles and set zsh as the default shell.
 
-**Commands:**
+**Precondition:** Dotfiles repo must be cloned (Step 4). fzf must be 0.48.0+ (Step 6).
+
+The dotfiles repo includes an install script at `~/dotfiles/zsh/install.sh` that handles everything:
+
+```bash
+~/dotfiles/zsh/install.sh
+```
+
+This script:
+1. Installs dependencies: zsh, fzf, stow, go, fd, eza, zoxide, yazi, lazygit, neovim, starship, sheldon
+2. Symlinks the starship config from `~/dotfiles/omarchy/.config/starship.toml`
+3. Stows the zsh config package (`~/.zshrc`, `~/.aliasesrc`, `~/.config/sheldon/plugins.toml`)
+4. Runs `sheldon lock` to initialize plugins (zsh-syntax-highlighting, zsh-autosuggestions, zsh-vi-mode)
+5. Sets zsh as the default shell via `chsh`
+
+**If the script fails** or you prefer to do it manually, here are the individual steps:
+
+### 7a: Install zsh
+
+```bash
+sudo apt update && sudo apt install -y zsh
+```
+
+### 7b: Install starship
+
+```bash
+curl -sS https://starship.rs/install.sh | sh -s -- -y
+```
+
+### 7c: Install sheldon
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source "$HOME/.cargo/env"
+cargo install sheldon
+```
+
+### 7d: Install other dependencies
+
+```bash
+sudo apt install -y stow fd-find eza zoxide
+```
+
+### 7e: Link starship config
+
+```bash
+mkdir -p ~/.config
+ln -sf ~/dotfiles/omarchy/.config/starship.toml ~/.config/starship.toml
+```
+
+### 7f: Stow zsh config
+
+```bash
+cd ~/dotfiles && stow -v --restow zsh
+```
+
+This creates symlinks for:
+- `~/.zshrc` → `dotfiles/zsh/.zshrc`
+- `~/.aliasesrc` → `dotfiles/zsh/.aliasesrc`
+- `~/.config/sheldon/plugins.toml` → `dotfiles/zsh/.config/sheldon/plugins.toml`
+
+### 7g: Initialize sheldon plugins
+
+```bash
+sheldon lock
+```
+
+### 7h: Set zsh as default shell
+
 ```bash
 sudo chsh -s $(which zsh) $USER
 ```
 
-**Verify:** Run `grep "^$USER:" /etc/passwd` — the last field must be `/usr/bin/zsh`.
-
-**Note:** The change takes effect on next login/reboot, not in the current session.
-
----
-
-## Step 7: Port bash config to zsh and apply dotfiles
-
-**Goal:** Carry over useful aliases, PATH, environment variables, and tool initializations from the existing bash setup into `~/.zshrc`. Also deploy zsh, tmux, and tmuxp configs from the dotfiles repo.
-
-**Precondition:** Read the existing `~/.bashrc` (and any files it sources) to discover what needs porting. The dotfiles repo must be cloned (Step 16).
-
-### 7a: Add settings to `~/.zshrc`
-
-Add these lines near the top of `~/.zshrc`, after the `export ZSH=` line:
+**Verify:**
+```bash
+grep "^$USER:" /etc/passwd
+```
+The last field must be `/usr/bin/zsh`.
 
 ```bash
-export DISABLE_AUTO_TITLE='true'
-set -o vi
+file ~/.zshrc ~/.aliasesrc ~/.config/sheldon
 ```
-
-Add fzf key bindings before the `ZSH_THEME` line:
+All must show as symbolic links into `dotfiles/zsh/...`.
 
 ```bash
-source /usr/share/doc/fzf/examples/key-bindings.zsh
-source /usr/share/doc/fzf/examples/completion.zsh
+TERM=xterm-256color zsh -c 'source ~/.zshrc && echo ok'
 ```
+Must print `ok` without errors.
 
-**fzf note:** The `fzf --zsh` flag requires fzf 0.48.0+. Ubuntu/Debian repos ship an older version (0.44.1) that does not support it and will error with `unknown option: --zsh`. Use the explicit source approach above which works with any version.
+**Note:** The shell change takes effect on next login/reboot, not in the current session.
 
-Add zsh-completions fpath and source lines before `source $ZSH/oh-my-zsh.sh`:
+### What the `.zshrc` does
 
-```bash
-fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
-autoload -U compinit && compinit
-```
+The dotfiles `.zshrc` (managed via stow, do not edit directly — edit `~/dotfiles/zsh/.zshrc` instead):
 
-Add these source lines right after `source $ZSH/oh-my-zsh.sh`:
+- Detects OS (macOS/Linux) and sets up Homebrew on macOS
+- Disables auto-title (`DISABLE_AUTO_TITLE`)
+- Initializes fzf via `source <(fzf --zsh)`
+- Loads completions (`compinit`)
+- Loads plugins via **Sheldon**: zsh-syntax-highlighting, zsh-autosuggestions, zsh-vi-mode
+- Sources `~/.tmux/window-name.zsh` (tmux window auto-renaming)
+- Sources `~/.aliasesrc` (shared aliases)
+- Adds `~/bin`, `~/.local/bin`, and `$(go env GOPATH)/bin` to `PATH`
+- Configures history deduplication
+- Initializes **Starship** prompt
+- Initializes **zoxide** (smart cd)
+- Binds `Alt+F` to zoxide interactive selection (`zi`)
 
-```bash
-source $HOME/.tmux/window-name.zsh
-source $HOME/.aliasesrc
-```
+### What `~/.aliasesrc` provides
 
-### 7b: Append the following to the end of `~/.zshrc`
-
-Adapt paths/aliases to what you find in the user's bash config:
-
-```bash
-# Path
-export PATH="./bin:$HOME/bin:$HOME/.local/bin:$HOME/.local/share/omakub/bin:/usr/local/bin:$PATH"
-export PATH="$PATH:$(go env GOPATH)/bin"
-export OMAKUB_PATH="$HOME/.local/share/omakub"
-
-# Editor
-export EDITOR="nvim"
-export SUDO_EDITOR="$EDITOR"
-
-# File system aliases
-alias ls='eza -lh --group-directories-first --icons=auto'
-alias lsa='ls -a'
-alias lt='eza --tree --level=2 --long --icons --git'
-alias lta='lt -a'
-alias ff="fzf --preview 'batcat --style=numbers --color=always {}'"
-alias fd='fdfind'
-alias cd='z'
-
-# Directory navigation
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-
-# Tools
-n() { if [ "$#" -eq 0 ]; then nvim .; else nvim "$@"; fi; }
-alias g='git'
-alias d='docker'
-alias r='rails'
-alias bat='batcat'
-alias lzg='lazygit'
-alias lzd='lazydocker'
-
-# Git aliases
-alias gcm='git commit -m'
-alias gcam='git commit -a -m'
-alias gcad='git commit -a --amend'
-
-# Tool initialization
-if command -v mise &> /dev/null; then
-  eval "$(mise activate zsh)"
-fi
-
-if command -v zoxide &> /dev/null; then
-  eval "$(zoxide init zsh)"
-fi
-
-# History dedup
-HISTDUP=erase
-setopt appendhistory
-setopt sharehistory
-setopt hist_ignore_space
-setopt hist_ignore_all_dups
-setopt hist_save_no_dups
-setopt hist_ignore_dups
-setopt hist_find_no_dups
-
-# Google Cloud SDK
-if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
-if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
-
-alias c8-start="$HOME/.tmuxp/start-all.sh"
-
-# SSH agent - use a fixed socket so it works across all tmux sessions
-export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
-if ! ssh-add -l &>/dev/null; then
-  rm -f "$SSH_AUTH_SOCK"
-  eval "$(ssh-agent -a "$SSH_AUTH_SOCK")" >/dev/null
-  ssh-add "$HOME/.ssh/github" 2>/dev/null
-fi
-```
-
-**Important:** When porting from bash, change `bash` to `zsh` in any `eval "$(tool activate bash)"` calls. Do not source bash-specific files (like `/usr/share/bash-completion/bash_completion`).
-
-### 7c: Deploy `~/.aliasesrc` from dotfiles
-
-```bash
-cp ~/dotfiles/linux/zsh/.aliasesrc ~/.aliasesrc
-```
-
-This provides additional aliases: `md` (mkdir + cd), `listen`, `k` (kubectl), `t` (tmux), `tp` (tmuxp), `c` (clear), `d` (docker), `e` (exit), `v` (fzf file picker into nvim), `lg` (lazygit), `mockery2`, `c8-start`, and the `fut` function.
-
-**Verify:** Run `zsh -c 'source ~/.zshrc && echo ok'` — must print `ok` without errors.
+- Navigation: `..`, `...`, `....`, `.....`
+- Tools: `n` (nvim), `v` (fzf→nvim), `y` (yazi), `lg` (lazygit), `k` (kubectl), `t` (tmux), `tp` (tmuxp), `c` (clear), `d` (docker), `e` (exit)
+- File listing: `l`, `ls`, `ll` (all using eza with icons)
+- Utilities: `md` (mkdir + cd), `listen` (OS-aware port listener), `c8-start` (tmuxp startup)
+- Project: `fut` function (runs `./fut` in go-microservices)
 
 ---
 
@@ -328,7 +300,7 @@ font-family = "CaskaydiaMono Nerd Font"
 font-size = 13
 ```
 
-Ghostty uses zsh automatically if it is the user's default shell (Step 6), so no explicit shell setting is needed.
+Ghostty uses zsh automatically if it is the user's default shell (Step 7), so no explicit shell setting is needed.
 
 **Verify:** Run `ghostty +show-config | grep -E 'font-family|font-size'` — must show `CaskaydiaMono Nerd Font` and `13`.
 
@@ -355,46 +327,7 @@ gsettings get org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profi
 
 ---
 
-## Step 10: Generate SSH key pair
-
-**Goal:** Generate an Ed25519 SSH key pair for the user and display the public key so it can be added to GitHub, GitLab, remote servers, etc.
-
-**Check first:** Run `ls ~/.ssh/id_ed25519.pub 2>/dev/null`. If the file exists, skip generation and just print the existing public key.
-
-**Commands (if no key exists):**
-```bash
-ssh-keygen -t ed25519 -C "$USER" -f ~/.ssh/id_ed25519 -N ""
-```
-
-**Flags explained:**
-- `-t ed25519` — use the Ed25519 algorithm (modern, fast, secure)
-- `-C "$USER"` — comment/label for the key (use the username)
-- `-f ~/.ssh/id_ed25519` — output file path
-- `-N ""` — empty passphrase (no interactive prompt)
-
-**Then print the public key:**
-```bash
-cat ~/.ssh/id_ed25519.pub
-```
-
-**Display the public key output to the user** so they can copy it to GitHub/GitLab/servers.
-
-**Verify:** Both files must exist with correct permissions:
-```bash
-ls -la ~/.ssh/id_ed25519 ~/.ssh/id_ed25519.pub
-```
-- `~/.ssh/id_ed25519` must be `-rw-------` (600)
-- `~/.ssh/id_ed25519.pub` must be `-rw-r--r--` (644)
-
-**Optional — add to ssh-agent:**
-```bash
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-```
-
----
-
-## Step 11: Create project directory
+## Step 9: Create project directory
 
 **Goal:** Create the main project workspace directory at `~/projects/captiv8`.
 
@@ -407,19 +340,13 @@ mkdir -p ~/projects/captiv8
 
 ---
 
-## Step 12: Install Kanata keyboard remapper
+## Step 10: Install Kanata keyboard remapper
 
 **Goal:** Clone the kanata-config repo, install the kanata binary, and set it up as a systemd service that starts at boot using the Linux config.
 
-**Precondition:** Git and SSH must be configured (Steps 10 and the SSH public key must be added to GitHub). Also requires Step 1 (passwordless sudo).
+**Precondition:** Git and SSH must be configured (Steps 2–3 and the SSH public key must be added to GitHub). Also requires Step 1 (passwordless sudo).
 
-### 12a: Add GitHub to known hosts
-
-```bash
-ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
-```
-
-### 12b: Clone the kanata-config repo
+### 10a: Clone the kanata-config repo
 
 ```bash
 git clone git@github.com:chris-toma/kanata-config.git ~/projects/kanata-config
@@ -427,7 +354,7 @@ git clone git@github.com:chris-toma/kanata-config.git ~/projects/kanata-config
 
 **Verify:** `ls ~/projects/kanata-config/linux-config.kbd` must exist.
 
-### 12c: Install the kanata binary
+### 10b: Install the kanata binary
 
 ```bash
 chmod +x ~/projects/kanata-config/bin/kanata
@@ -436,7 +363,7 @@ sudo cp ~/projects/kanata-config/bin/kanata /usr/local/bin/kanata
 
 **Verify:** `kanata --version` must return a version string.
 
-### 12d: Set up uinput permissions
+### 10c: Set up uinput permissions
 
 Kanata needs access to `/dev/uinput` for virtual keyboard input.
 
@@ -447,7 +374,7 @@ echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinpu
 sudo modprobe uinput
 ```
 
-### 12e: Create systemd service
+### 10d: Create systemd service
 
 **Important:** Use a **system-level** service (not user-level) because kanata needs root access to input devices.
 
@@ -472,13 +399,12 @@ WantedBy=multi-user.target
 
 **Commands to install and enable:**
 ```bash
-sudo cp kanata.service /etc/systemd/system/kanata.service
 sudo systemctl daemon-reload
 sudo systemctl enable kanata.service
 sudo systemctl start kanata.service
 ```
 
-### 12f: Verify
+### 10e: Verify
 
 ```bash
 sudo systemctl status kanata.service
@@ -495,13 +421,13 @@ journalctl -u kanata.service --no-pager -n 20
 
 ---
 
-## Step 13: Clone project repos into captiv8
+## Step 11: Clone project repos into captiv8
 
 **Goal:** Clone the Captiv8 project repositories into `~/projects/captiv8`.
 
-**Precondition:** SSH key must be generated (Step 10) and added to GitHub. GitHub must be in known hosts (Step 12a).
+**Precondition:** SSH key must be generated (Step 2) and added to GitHub. GitHub must be in known hosts (Step 3).
 
-### 13a: Clone go-microservice-env
+### 11a: Clone go-microservice-env
 
 ```bash
 git clone git@github.com:chris-toma/go-microservice-env.git ~/projects/captiv8/go-microservice-env
@@ -509,7 +435,7 @@ git clone git@github.com:chris-toma/go-microservice-env.git ~/projects/captiv8/g
 
 **Verify:** Run `ls ~/projects/captiv8/go-microservice-env/` — must contain project files (e.g. `README.md`, `scripts/`, `services/`).
 
-### 13b: Clone go-microservices
+### 11b: Clone go-microservices
 
 ```bash
 git clone git@github.com:captiv8io/go-microservices.git ~/projects/captiv8/go-microservices
@@ -519,11 +445,11 @@ git clone git@github.com:captiv8io/go-microservices.git ~/projects/captiv8/go-mi
 
 ---
 
-## Step 14: Install buf and mockery
+## Step 12: Install buf and mockery
 
 **Goal:** Install `buf` (Protocol Buffers toolchain) and `mockery` (Go mock code generator) via `go install`.
 
-**Precondition:** Go must be installed (e.g. via mise).
+**Precondition:** Go must be installed (e.g. via mise). `$(go env GOPATH)/bin` must be in `PATH` (it is added in the dotfiles `.zshrc`).
 
 **Commands:**
 ```bash
@@ -531,43 +457,35 @@ go install github.com/bufbuild/buf/cmd/buf@latest
 go install github.com/vektra/mockery/v3@latest
 ```
 
-**Verify:** Run `buf --version` — must return a version (e.g. `1.65.0`). Run `mockery version` — must return a version (e.g. `v3.6.4`).
-
-**Note:** The binaries are installed to `$(go env GOPATH)/bin`. Ensure this directory is in your `PATH` (it is added in Step 7b).
+**Verify:** Run `buf --version` — must return a version. Run `mockery version` — must return a version.
 
 ---
 
-## Step 15: Install tmux, tmuxp, and stow
+## Step 13: Install tmux and tmuxp
 
-**Goal:** Install tmux (terminal multiplexer), tmuxp (tmux session manager), and GNU stow (symlink farm manager for dotfiles).
+**Goal:** Install tmux (terminal multiplexer) and tmuxp (tmux session manager).
+
+**Note:** `stow` is already installed by the zsh install script (Step 7).
 
 **Commands:**
 ```bash
-sudo apt install -y tmux stow
+sudo apt install -y tmux
 pip install --user tmuxp
 ```
 
-**Verify:** Run `tmux -V` — must return a version (e.g. `tmux 3.4`). Run `tmuxp --version` — must return a version (e.g. `tmuxp 1.64.0`). Run `stow --version` — must return a version.
+**Verify:** Run `tmux -V` — must return a version (e.g. `tmux 3.4`). Run `tmuxp --version` — must return a version (e.g. `tmuxp 1.64.0`).
 
 **Note:** If `pip install --user` fails, try `pipx install tmuxp` instead.
 
 ---
 
-## Step 16: Clone dotfiles and deploy configs with stow
+## Step 14: Deploy tmux and tmuxp configs with stow
 
-**Goal:** Clone the dotfiles repo and use GNU stow to create symlinks for tmux, tmuxp, and aliases configs.
+**Goal:** Use GNU stow to create symlinks for tmux and tmuxp configs, then install TPM and tmux plugins.
 
-**Precondition:** SSH key must be generated (Step 10) and added to GitHub. GitHub must be in known hosts (Step 12a). tmux, tmuxp, and stow must be installed (Step 15).
+**Precondition:** Dotfiles repo must be cloned (Step 4). tmux and tmuxp must be installed (Step 13).
 
-### 16a: Clone the dotfiles repo
-
-```bash
-git clone git@github.com:chris-toma/dotfiles.git ~/dotfiles
-```
-
-**Verify:** `ls ~/dotfiles/linux/` — must contain `zsh/`, `tmux/`, and `tmuxp/` directories.
-
-### 16b: Stow tmux config
+### 14a: Stow tmux config
 
 This creates symlinks for `~/.tmux.conf` and `~/.tmux/` (which contains the window-naming hook).
 
@@ -583,7 +501,7 @@ file ~/.tmux.conf ~/.tmux
 ```
 Both must show as `symbolic link to dotfiles/tmux/...`.
 
-### 16c: Stow tmuxp session configs
+### 14b: Stow tmuxp session configs
 
 ```bash
 cd ~/dotfiles/linux && stow tmuxp -t ~
@@ -602,19 +520,7 @@ file ~/.tmuxp
 ```
 Must show as `symbolic link to dotfiles/linux/tmuxp/.tmuxp`.
 
-### 16d: Stow zsh aliases
-
-Stow the `linux/zsh` package but ignore `.zshrc` (we maintain our own customized version):
-
-```bash
-cd ~/dotfiles/linux && stow zsh -t ~ --ignore='\.zshrc'
-```
-
-This creates a symlink for `~/.aliasesrc` without touching `~/.zshrc`.
-
-**Verify:** `file ~/.aliasesrc` — must show as a symbolic link to `dotfiles/linux/zsh/.aliasesrc`.
-
-### 16e: Install TPM (Tmux Plugin Manager) and plugins
+### 14c: Install TPM (Tmux Plugin Manager) and plugins
 
 The `.tmux.conf` uses TPM to manage plugins. Install TPM:
 
@@ -644,19 +550,19 @@ To start all services: run `c8-start` (or `~/.tmuxp/start-all.sh`).
 
 ---
 
-## Step 17: Configure Logitech MX Master mouse (LogiOps)
+## Step 15: Configure Logitech MX Master mouse (LogiOps)
 
 **Goal:** Configure the Logitech MX Master mouse using `logiops` (`logid`) so the thumb button opens GNOME Activities (Super key), while back/forward side buttons retain their default behavior.
 
 **Precondition:** `logiops` must be installed. Check with `logid --version`.
 
-### 17a: Install logiops (if not installed)
+### 15a: Install logiops (if not installed)
 
 ```bash
 sudo apt install -y logiops
 ```
 
-### 17b: Write the config
+### 15b: Write the config
 
 Create/replace `/etc/logid.cfg` with:
 
@@ -696,14 +602,14 @@ devices: (
 - The original MX Master does not support raw XY diversion on `0xc3`, so gesture-type actions (hold + swipe) will not work. Use a simple `Keypress` instead.
 - The device name must be `"Wireless Mouse MX Master"` (not `"MX Master"` or other variants). Run `logid -v` to confirm the detected name.
 
-### 17c: Enable and restart the service
+### 15c: Enable and restart the service
 
 ```bash
 sudo systemctl enable logid
 sudo systemctl restart logid
 ```
 
-### 17d: Verify
+### 15d: Verify
 
 ```bash
 systemctl status logid
@@ -719,83 +625,73 @@ Run `logid -v` (after stopping the service) to confirm button mappings are appli
 
 ---
 
-## Step 18: Install Slack
+## Step 16: Install Slack
 
 **Goal:** Install the Slack desktop client for team communication.
 
 **Check first:** Run `which slack`. If it returns a path, skip this step.
 
-**Commands (Arch Linux with yay):**
-```bash
-yay -S --noconfirm slack-desktop
-```
-
 **Commands (Ubuntu/Debian):**
 ```bash
-curl -fLO https://downloads.slack-edge.com/desktop-releases/linux/x64/4.47.69/slack-desktop-4.47.69-amd64.deb
-sudo dpkg -i slack-desktop-4.47.69-amd64.deb
+curl -fLo /tmp/slack.deb https://downloads.slack-edge.com/desktop-releases/linux/x64/4.47.69/slack-desktop-4.47.69-amd64.deb
+sudo dpkg -i /tmp/slack.deb
 sudo apt install -f -y
-rm slack-desktop-4.47.69-amd64.deb
+rm /tmp/slack.deb
 ```
 
-**Verify:** Run `which slack` — must return a path. Launch with `slack` from the terminal or from the application menu.
+**Verify:** Run `which slack` — must return a path.
 
 ---
 
-## Step 19: Install GoLand
+## Step 17: Install GoLand
 
 **Goal:** Install JetBrains GoLand IDE for Go development.
 
 **Check first:** Run `which goland`. If it returns a path, skip this step.
 
-**Commands (Arch Linux with yay):**
+**Commands (Ubuntu/Debian):**
 ```bash
-yay -S --noconfirm goland goland-jre
+sudo snap install goland --classic
 ```
 
-**Commands (Ubuntu/Debian):** Download from https://www.jetbrains.com/go/download/ or install via the JetBrains Toolbox App.
+Alternatively, download from https://www.jetbrains.com/go/download/ or install via the JetBrains Toolbox App.
 
-**Verify:** Run `which goland` — must return `/usr/bin/goland`.
+**Verify:** Run `which goland` — must return a path.
 
 ---
 
-## Step 20: Install Postman
+## Step 18: Install Postman
 
 **Goal:** Install Postman for API testing and development.
 
 **Check first:** Run `which postman`. If it returns a path, skip this step.
 
-**Commands (Arch Linux with yay):**
-```bash
-yay -S --noconfirm postman-bin
-```
-
 **Commands (Ubuntu/Debian):**
 ```bash
-curl -fLO https://dl.pstmn.io/download/latest/linux_64 -o postman-linux-x64.tar.gz
-sudo tar -xzf postman-linux-x64.tar.gz -C /opt
+curl -fLo /tmp/postman-linux-x64.tar.gz https://dl.pstmn.io/download/latest/linux_64
+sudo tar -xzf /tmp/postman-linux-x64.tar.gz -C /opt
 sudo ln -sf /opt/Postman/Postman /usr/local/bin/postman
-rm postman-linux-x64.tar.gz
+rm /tmp/postman-linux-x64.tar.gz
 ```
 
 **Verify:** Run `which postman` — must return a path.
 
 ---
 
-## Step 21: Configure Hyprland keyboard shortcuts
+## Step 19: Configure Hyprland keyboard shortcuts
 
 **Goal:** Add Alt + number shortcuts to quickly launch frequently used applications.
 
-**Precondition:** Hyprland must be the active compositor. Check with `echo $XDG_CURRENT_DESKTOP` — must return `Hyprland`. All target applications must be installed (Steps 18–20).
+**Precondition:** Hyprland must be the active compositor. Check with `echo $XDG_CURRENT_DESKTOP` — must return `Hyprland`. If running GNOME or another DE, skip this step entirely.
 
-### 21a: Find the bindings config
+### 19a: Find the bindings config
 
 Hyprland splits config across files in `~/.config/hypr/`. The keybindings file is:
 ```
 ~/.config/hypr/bindings.conf
 ```
 
-### 21b: Add quick-launch bindings
+### 19b: Add quick-launch bindings
 
 Append the following to `~/.config/hypr/bindings.conf`:
 
@@ -813,7 +709,7 @@ bindd = ALT, 9, Postman, exec, uwsm-app -- postman
 - `uwsm-app --` ensures the app launches under the Wayland session manager correctly.
 - Alt+5 through Alt+8 are left free for future use.
 
-### 21c: Reload Hyprland
+### 19c: Reload Hyprland
 
 Hyprland live-reloads config on save, so no manual reload is needed. To force a reload:
 ```bash
@@ -829,7 +725,7 @@ hyprctl reload
 After all steps are complete, inform the user:
 
 1. **Log out and log back in** (or reboot) for the default shell change to take effect.
-2. **On first zsh launch**, the Powerlevel10k configuration wizard will run automatically. Follow its prompts to choose a prompt style. It can be re-run anytime with `p10k configure`.
-3. **Passwordless sudo is a security trade-off.** It should only be used on personal/development machines, never on shared or production servers.
-4. **Copy the SSH public key** to any services you need (GitHub, GitLab, remote servers). On GitHub: Settings > SSH and GPG keys > New SSH key.
-5. **Kanata** is running as a system service. To reload after config changes: `sudo systemctl restart kanata.service`. To stop: `sudo systemctl stop kanata.service`.
+2. **Passwordless sudo is a security trade-off.** It should only be used on personal/development machines, never on shared or production servers.
+3. **Copy the SSH public key** to any services you need (GitHub, GitLab, remote servers). On GitHub: Settings > SSH and GPG keys > New SSH key.
+4. **Kanata** is running as a system service. To reload after config changes: `sudo systemctl restart kanata.service`. To stop: `sudo systemctl stop kanata.service`.
+5. **Do not edit `~/.zshrc` directly** — it is a symlink to `~/dotfiles/zsh/.zshrc`. Edit the file in the dotfiles repo and changes will take effect immediately.
