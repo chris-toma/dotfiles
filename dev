@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+rm -rf ~/.local/share/nvim/
+rm -rf ~/.config/nvim
+ln -s $(cd "$(dirname "$0")" && pwd)/omarchy/.config/nvim ~/.config/nvim
