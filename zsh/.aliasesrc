@@ -17,6 +17,8 @@ alias l='eza -la --icons --git'
 alias ls='eza --icons'
 alias ll='eza -la --icons --git --tree --level=2'
 alias lg=lazygit
+alias cl=claude
+alias a='agent'
 # OS-specific aliases
 case "$(uname -s)" in
   Darwin)
