@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "*",
+      "Bash(dangerouslyDisableSandbox=true)"
+    ]
+  },
+  "effortLevel": "high",
+  "enabledPlugins": {
+    "gopls-lsp@claude-plugins-official": true
+  }
+}
