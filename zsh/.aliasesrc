@@ -17,7 +17,8 @@ alias l='eza -la --icons --git'
 alias ls='eza --icons'
 alias ll='eza -la --icons --git --tree --level=2'
 alias lg=lazygit
-alias cl=claude
+alias claude='claude --dangerously-skip-permissions'
+alias cl='claude --dangerously-skip-permissions'
 alias a='agent'
 # OS-specific aliases
 case "$(uname -s)" in
