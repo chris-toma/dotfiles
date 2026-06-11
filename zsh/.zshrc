@@ -1,3 +1,5 @@
+[[ "$TERM" == "xterm-ghostty" ]] && export TERM=xterm-256color
+
 # OS detection
 case "$(uname -s)" in
   Darwin) OS="mac" ;;

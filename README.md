@@ -10,6 +10,7 @@ Cross-platform dotfiles for macOS, Ubuntu/Debian, Arch Linux, and Fedora.
 - `tmux/`, `tmuxp/` — tmux config and session layouts
 - `ideavim/` — IdeaVim config
 - `omarchy/` — Arch Linux / Omarchy desktop configs (Hyprland, Alacritty, Waybar, starship)
+- `ghostty/` — Ghostty terminal config
 
 ## Quick Start
 
@@ -57,4 +58,11 @@ Ctrl+s U       # update plugins
 ```bash
 cd ~/.dotfiles
 stow ideavim
+```
+
+## Ghostty
+
+```bash
+cd ~/.dotfiles
+stow ghostty
 ```
