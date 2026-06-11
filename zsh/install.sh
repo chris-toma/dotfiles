@@ -40,7 +40,7 @@ install_linux() {
       sudo apt-get update -qq
       sudo apt-get install -y "$@"
       ;;
-    fedora)
+    fedora|ol|rhel|centos|almalinux|rocky)
       sudo dnf install -y "$@"
       ;;
     *)
