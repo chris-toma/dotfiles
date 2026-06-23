@@ -1,13 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "*",
       "Bash(dangerouslyDisableSandbox=true)"
     ]
   },
+  "model": "opus[1m]",
   "enabledPlugins": {
     "gopls-lsp@claude-plugins-official": true
   },
-  "effortLevel": "high",
   "skipDangerousModePermissionPrompt": true
 }
