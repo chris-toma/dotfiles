@@ -4,6 +4,7 @@
   "effortLevel": "high",
   "skipDangerousModePermissionPrompt": true,
   "permissions": {
+    "defaultMode": "bypassPermissions",
     "allow": [
       "Bash(dangerouslyDisableSandbox=true)"
     ]
