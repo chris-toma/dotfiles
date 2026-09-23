@@ -1,15 +1,14 @@
 {
-  "model": "opus[1m]",
-  "tui": "fullscreen",
-  "effortLevel": "high",
-  "skipDangerousModePermissionPrompt": true,
   "permissions": {
-    "defaultMode": "bypassPermissions",
     "allow": [
       "Bash(dangerouslyDisableSandbox=true)"
-    ]
+    ],
+    "defaultMode": "bypassPermissions"
   },
   "enabledPlugins": {
     "gopls-lsp@claude-plugins-official": true
-  }
+  },
+  "effortLevel": "high",
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true
 }
